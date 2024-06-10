@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import Select from "react-select";
 
-const FilterCategories = ({ categories, setSelectedOptions }) => {
+const FilterCategories = ({ categories, setSelectedOptions, header }) => {
   console.log("categories: ", categories);
 
   const changeSelected = (selected) => {
@@ -15,6 +15,7 @@ const FilterCategories = ({ categories, setSelectedOptions }) => {
       isMulti
       options={categories}
       onChange={changeSelected}
+      placeholder={"Choose " + header}
       autoFocus
     />
   );

@@ -2,7 +2,16 @@ import FilterCategories from "./filterCategories";
 import { useState } from "react";
 
 const PrintData = ({ formHeader, formData, categories }) => {
+  const DISABLED_COLUMNS = ["rating", "image", "description"];
+
   const [selectedOptions, setSelectedOptions] = useState([]);
+
+  const limitNames = (name) => {
+    if (typeof name !== "string") {
+      return name;
+    }
+    return name.length < 20 ? name : name.substring(0, 40) + "...";
+  };
 
   const filterStuff = (data) => {
     if (selectedOptions.length == 0) {
@@ -24,20 +33,20 @@ const PrintData = ({ formHeader, formData, categories }) => {
       <thead>
         <tr>
           {formHeader.map((header) => {
-            if (header === "rating" || header === "image")
+            if (DISABLED_COLUMNS.includes(header))
               return <td key={header}></td>;
-            if (header == "category") {
+            else if (header == "category") {
               return (
-                <>
+                <th style={{ width: "250px" }}>
                   <FilterCategories
                     categories={categories}
                     setSelectedOptions={setSelectedOptions}
+                    header={header.toUpperCase()}
                   />
-                  <th key={header}> {header}</th>
-                </>
+                </th>
               );
             }
-            return <th key={header}> {header}</th>;
+            return <th key={header}> {header.toUpperCase()}</th>;
           })}
         </tr>
       </thead>
@@ -46,11 +55,9 @@ const PrintData = ({ formHeader, formData, categories }) => {
         {filterStuff(formData).map((data, i) => (
           <tr key={i}>
             {Object.keys(data).map((value) => {
-              if (value === "rating" || value === "image")
+              if (DISABLED_COLUMNS.includes(value))
                 return <td key={value.id}></td>;
-              else if (value === "description")
-                return <td key={value.id}>{data[value].slice(0, 100)}</td>;
-              else return <td key={value.id}>{data[value]}</td>;
+              else return <td key={value.id}>{limitNames(data[value])}</td>;
             })}
           </tr>
         ))}
