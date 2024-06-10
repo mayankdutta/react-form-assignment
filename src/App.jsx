@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
+import PrintData from "./component/printData";
 
 function App() {
   const [formData, setFormData] = useState([]);
   const [formHeader, setFormHeader] = useState([]);
+  const [categories, setCategories] = useState(new Set());
 
   useEffect(() => {
     async function getData() {
@@ -10,16 +12,20 @@ function App() {
         const data = await fetch("https://fakestoreapi.com/products");
         const modified_data = await data.json();
 
-
         let tempFormHeader = [];
         for (let i in modified_data[0]) {
           tempFormHeader.push(i);
         }
 
-        console.log(modified_data);
+        let st = new Set();
+        for (let i in modified_data) {
+          st.add(modified_data[i]['category']);
+        }
 
         setFormHeader(tempFormHeader);
         setFormData(modified_data);
+        setCategories(st);
+
       } catch (error) {
         console.log(error.message);
       }
@@ -28,27 +34,12 @@ function App() {
     getData();
   }, []);
 
+
   if (formData.length) {
     return (
-      <table>
-        <tr>
-          {formHeader.map((header) => {
-            if (header === "rating" || header === "image")
-              return <td key={header}></td>;
-            return <th key={header}> {header}</th>;
-          })}
-        </tr>
 
-        {formData.map((data, i) => (
-          <tr key={i}>
-            {Object.keys(data).map((value) => {
-              if (value === "rating" || value === "image")
-                return <td key={value.id}></td>;
-              else return <td key={value.id}>{data[value]}</td>;
-            })}
-          </tr>
-        ))}
-      </table>
+<PrintData formHeader={formHeader} formData={formData.slice(0, 5)} />
+
     );
   } else {
     return <> Loading .... </>;
