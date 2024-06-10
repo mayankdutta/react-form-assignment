@@ -4,7 +4,7 @@ import PrintData from "./component/printData";
 function App() {
   const [formData, setFormData] = useState([]);
   const [formHeader, setFormHeader] = useState([]);
-  const [categories, setCategories] = useState(new Set());
+  const [categories, setCategories] = useState([]);
 
   useEffect(() => {
     async function getData() {
@@ -19,13 +19,23 @@ function App() {
 
         let st = new Set();
         for (let i in modified_data) {
-          st.add(modified_data[i]['category']);
+          st.add(modified_data[i]["category"]);
         }
+
+        console.log("set value: ", st);
+
+        let st_array = Array.from(st);
+        let temp_arr = [];
+
+        for (let i in st_array) {
+          temp_arr.push({ label: st_array[i], value: st_array[i] });
+        }
+
+        console.log('prining temp_arr: ', temp_arr)
 
         setFormHeader(tempFormHeader);
         setFormData(modified_data);
-        setCategories(st);
-
+        setCategories(temp_arr);
       } catch (error) {
         console.log(error.message);
       }
@@ -34,12 +44,13 @@ function App() {
     getData();
   }, []);
 
-
   if (formData.length) {
     return (
-
-<PrintData formHeader={formHeader} formData={formData.slice(0, 5)} />
-
+      <PrintData
+        formHeader={formHeader}
+        formData={formData}
+        categories={categories}
+      />
     );
   } else {
     return <> Loading .... </>;
