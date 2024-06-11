@@ -1,0 +1,106 @@
+/* printTable.css */
+
+/* Base styles for the table */
+
+.table-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    background-color: #f4f4f4; /* Optional: add a background color for the container */
+  }
+
+table {
+    width: 80%;
+    border-collapse: collapse;
+    font-family: Arial, sans-serif;
+    color: #333;
+    background-color: #fff;
+
+    
+  }
+  
+  /* Header styles */
+  thead th {
+    text-align: left;
+    padding: 10px 15px;
+    font-size: 14px;
+    font-weight: bold;
+    background-color: #f4f4f4;
+    color: #000;
+
+  }
+  
+  /* Category header specific styles */
+  .filter-categories {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .filter-categories-header {
+    margin-bottom: 8px;
+  }
+  
+  .filter-categories select {
+    width: 100%;
+    padding: 5px;
+    font-size: 14px;
+  }
+  
+  /* Body row styles */
+  tbody tr {
+    border-bottom: 1px solid #e0e0e0;
+  }
+  
+  tbody td {
+    padding: 10px 15px;
+    font-size: 14px;
+  }
+  
+
+/* Alternate row coloring for better readability */
+  tbody tr:nth-child(odd) {
+    background-color: #fafafa;
+  }
+  
+  /* Space for the category column */
+
+  /* General responsive styling */
+  @media (max-width: 768px) {
+    table,
+    thead,
+    tbody,
+    th,
+    td,
+    tr {
+      display: block;
+    }
+  
+    thead tr {
+      position: absolute;
+      top: -9999px;
+      left: -9999px;
+    }
+  
+    tbody tr {
+      margin: 0 0 1rem 0;
+    }
+  
+    tbody td {
+      border: none;
+      position: relative;
+      padding-left: 50%;
+    }
+  
+    tbody td:before {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      width: 45%;
+      padding-right: 10px;
+      white-space: nowrap;
+      content: attr(data-label);
+      font-weight: bold;
+    }
+  }
+  

@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import PrintData from "./component/printData";
+import PrintTable from "./component/printTable";
+import Form from "./component/form";
 
 function App() {
   const [formData, setFormData] = useState([]);
@@ -31,7 +32,7 @@ function App() {
           temp_arr.push({ label: st_array[i], value: st_array[i] });
         }
 
-        console.log('prining temp_arr: ', temp_arr)
+        console.log("prining temp_arr: ", temp_arr);
 
         setFormHeader(tempFormHeader);
         setFormData(modified_data);
@@ -46,11 +47,14 @@ function App() {
 
   if (formData.length) {
     return (
-      <PrintData
-        formHeader={formHeader}
-        formData={formData}
-        categories={categories}
-      />
+      <>
+        <PrintTable
+          formHeader={formHeader}
+          formData={formData}
+          categories={categories}
+        />
+        <Form categories={categories} />
+      </>
     );
   } else {
     return <> Loading .... </>;

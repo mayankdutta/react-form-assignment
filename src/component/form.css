@@ -1,0 +1,79 @@
+/* form.css */
+
+/* Container to center the form */
+.form-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  background-color: #f4f4f4; /* Optional: add a background color for the container */
+}
+
+/* Base styles for the form */
+form {
+  width: 100%;
+  max-width: 600px; /* Set a max-width for the form */
+  padding: 20px;
+  background-color: #fff;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Subtle shadow for a neat look */
+  border-radius: 5px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  font-family: Arial, sans-serif;
+  color: #333;
+}
+
+/* Input styles */
+input[type="text"],
+input[type="number"] {
+  width: calc(100% - 20px); /* Adjust width to account for padding */
+  padding: 10px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-sizing: border-box;
+}
+
+input::placeholder {
+  color: #aaa;
+}
+
+/* Button styles */
+button[type="submit"] {
+  padding: 10px 20px;
+  font-size: 16px;
+  color: #fff;
+  background-color: #333;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  align-self: flex-end;
+}
+
+button[type="submit"]:hover {
+  background-color: #555;
+}
+
+/* FilterCategories styles */
+.filter-categories {
+  display: flex;
+  flex-direction: column;
+}
+
+.filter-categories-header {
+  margin-bottom: 8px;
+}
+
+.filter-categories select {
+  width: 100%;
+  padding: 5px;
+  font-size: 14px;
+}
+
+/* General responsive styling */
+@media (max-width: 768px) {
+  form {
+    padding: 15px;
+  }
+}
