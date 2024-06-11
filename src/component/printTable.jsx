@@ -1,11 +1,14 @@
 /* eslint-disable react/prop-types */
 import FilterCategories from "./filterCategories";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import "./printTable.css";
+import { APIDataContext } from "../contexts/apiData";
 
-const PrintTable = ({ formHeader, formData, categories, setFormData }) => {
+const PrintTable = () => {
+  const { formHeader, formData, categories } = useContext(APIDataContext);
   const DISABLED_COLUMNS = ["rating", "image", "description"];
   const [selectedOptions, setSelectedOptions] = useState([]);
+  const { setFormData } = useContext(APIDataContext);
 
   const limitNames = (name) => {
     if (typeof name !== "string") {
@@ -29,14 +32,10 @@ const PrintTable = ({ formHeader, formData, categories, setFormData }) => {
     return new_data;
   };
 
-  // const deleteRow = (id) => {
-
-  //   console.log(`${id} is pressed`);
-
-  //   setFormData(formData.filter((i) => {
-  //     i !== id
-  //   }));
-  // }
+  const deleteRow = (id) => {
+    // console.log(`${id} is pressed`);
+    setFormData(formData.filter((i) => i.id !== id));
+  };
 
   return (
     <div className="table-container">
@@ -44,28 +43,28 @@ const PrintTable = ({ formHeader, formData, categories, setFormData }) => {
         <thead>
           <tr>
             <>
-            {formHeader.map((header) => {
-              if (DISABLED_COLUMNS.includes(header)) return null;
-              else if (header == "category") {
-                return (
-                  <th key={header}>
-                    <div className="filter-categories">
-                      <div className="filter-categories-header">
-                        {header.toUpperCase()}
+              {formHeader.map((header) => {
+                if (DISABLED_COLUMNS.includes(header)) return null;
+                else if (header == "category") {
+                  return (
+                    <th key={header}>
+                      <div className="filter-categories">
+                        <div className="filter-categories-header">
+                          {header.toUpperCase()}
+                        </div>
+                        <FilterCategories
+                          categories={categories}
+                          setSelectedOptions={setSelectedOptions}
+                          header={""}
+                        />
                       </div>
-                      <FilterCategories
-                        categories={categories}
-                        setSelectedOptions={setSelectedOptions}
-                        header={""}
-                      />
-                    </div>
-                  </th>
-                );
-              }
-      
-              return <th key={header}> {header.toUpperCase()}</th>;
-            })}
-            {/* <th> DELETE </th> */}
+                    </th>
+                  );
+                }
+
+                return <th key={header}> {header.toUpperCase()}</th>;
+              })}
+              <th> DELETE </th>
             </>
           </tr>
         </thead>
@@ -74,11 +73,13 @@ const PrintTable = ({ formHeader, formData, categories, setFormData }) => {
           {filterStuff(formData).map((data, i) => (
             <tr key={i}>
               <>
-              {Object.keys(data).map((value) => {
-                if (DISABLED_COLUMNS.includes(value)) return null;
-                else return <td key={value.id}>{limitNames(data[value])}</td>;
-              })}
-              {/* <td><button onClick = {() => deleteRow(data.id)}>X</button></td> */}
+                {Object.keys(data).map((value) => {
+                  if (DISABLED_COLUMNS.includes(value)) return null;
+                  else return <td key={value.id}>{limitNames(data[value])}</td>;
+                })}
+                <td>
+                  <button onClick={() => deleteRow(data.id)}>X</button>
+                </td>
               </>
             </tr>
           ))}
