@@ -17,15 +17,15 @@ const Form = () => {
   const handleSubmit = (event) => {
     event.preventDefault();
 
-    console.log("checking form data: ", formData);
+    // console.log("checking form data: ", formData);
 
-    console.log(
-      "checking form submit: ",
-      formData.length ? formData[formData.length - 1].id + 1 : 1,
-      rowData.title,
-      rowData.price,
-      selectedOptions.label
-    );
+    // console.log(
+    //   "checking form submit: ",
+    //   formData.length ? formData[formData.length - 1].id + 1 : 1,
+    //   rowData.title,
+    //   rowData.price,
+    //   selectedOptions.label
+    // );
 
     setFormData([
       ...formData,
@@ -36,6 +36,8 @@ const Form = () => {
         category: selectedOptions.label,
       },
     ]);
+
+    setRowData({title: "", price: ""});
   };
 
   const handleChange = (event) => {
