@@ -13,30 +13,16 @@ function App() {
         const data = await fetch("https://fakestoreapi.com/products");
         const modified_data = await data.json();
 
-        let tempFormHeader = [];
-        for (let i in modified_data[0]) {
-          tempFormHeader.push(i);
-        }
+        const categoriesSet = new Set(modified_data.map(item => item.category));
+        const tempArr = Array.from(categoriesSet).map(category => ({
+          label: category, 
+          value: category
+        })) 
 
-        let st = new Set();
-        for (let i in modified_data) {
-          st.add(modified_data[i]["category"]);
-        }
-
-        console.log("set value: ", st);
-
-        let st_array = Array.from(st);
-        let temp_arr = [];
-
-        for (let i in st_array) {
-          temp_arr.push({ label: st_array[i], value: st_array[i] });
-        }
-
-        console.log("prining temp_arr: ", temp_arr);
-
-        setFormHeader(tempFormHeader);
+        setFormHeader(Object.keys(modified_data[0]));
         setFormData(modified_data);
-        setCategories(temp_arr);
+        setCategories(tempArr);
+
       } catch (error) {
         console.log(error.message);
       }
@@ -52,8 +38,13 @@ function App() {
           formHeader={formHeader}
           formData={formData}
           categories={categories}
+          setFormData={setFormData}
         />
-        <Form categories={categories} />
+        <Form
+          categories={categories}
+          formData={formData}
+          setFormData={setFormData}
+        />
       </>
     );
   } else {

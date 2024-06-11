@@ -3,9 +3,8 @@ import FilterCategories from "./filterCategories";
 import { useState } from "react";
 import "./printTable.css";
 
-const PrintTable = ({ formHeader, formData, categories }) => {
+const PrintTable = ({ formHeader, formData, categories, setFormData }) => {
   const DISABLED_COLUMNS = ["rating", "image", "description"];
-
   const [selectedOptions, setSelectedOptions] = useState([]);
 
   const limitNames = (name) => {
@@ -30,11 +29,21 @@ const PrintTable = ({ formHeader, formData, categories }) => {
     return new_data;
   };
 
+  // const deleteRow = (id) => {
+
+  //   console.log(`${id} is pressed`);
+
+  //   setFormData(formData.filter((i) => {
+  //     i !== id
+  //   }));
+  // }
+
   return (
     <div className="table-container">
       <table>
         <thead>
           <tr>
+            <>
             {formHeader.map((header) => {
               if (DISABLED_COLUMNS.includes(header)) return null;
               else if (header == "category") {
@@ -53,18 +62,24 @@ const PrintTable = ({ formHeader, formData, categories }) => {
                   </th>
                 );
               }
+      
               return <th key={header}> {header.toUpperCase()}</th>;
             })}
+            {/* <th> DELETE </th> */}
+            </>
           </tr>
         </thead>
 
         <tbody>
           {filterStuff(formData).map((data, i) => (
             <tr key={i}>
+              <>
               {Object.keys(data).map((value) => {
                 if (DISABLED_COLUMNS.includes(value)) return null;
                 else return <td key={value.id}>{limitNames(data[value])}</td>;
               })}
+              {/* <td><button onClick = {() => deleteRow(data.id)}>X</button></td> */}
+              </>
             </tr>
           ))}
         </tbody>

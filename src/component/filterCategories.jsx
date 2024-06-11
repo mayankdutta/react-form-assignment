@@ -38,7 +38,7 @@ const FilterCategories = ({
   );
 
   const changeSelected = (selected) => {
-    console.log("validating stuff: ", Object.values(selected));
+    console.log("checking selected : ", Object.values(selected));
     setSelectedOptions(selected);
   };
 
