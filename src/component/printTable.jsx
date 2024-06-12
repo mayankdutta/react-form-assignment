@@ -24,7 +24,10 @@ const PrintTable = () => {
     }
     return data.filter((d) => {
       return selectedOptions.find((value) => {
-        return value.label === d.category;
+        // console.log(
+        //   `value label: ${value.label}, category: ${d.category}`
+        // );
+        return value.label === d.category.toUpperCase();
       });
     });
   };
@@ -79,13 +82,13 @@ const TableHeader = ({ setSelectedOptions }) => {
         else if (header == "category") {
           return (
             <th key={header}>
-              <div className="filter-categories">
-                <div className="filter-categories-header">
+              <div className="filter-categories filter-categories-header">
+                {/* <div className="filter-categories-header">
                   {header.toUpperCase()}
-                </div>
+                </div> */}
                 <FilterCategories
                   setSelectedOptions={setSelectedOptions}
-                  header={""}
+                  header={header.toUpperCase()}
                 />
               </div>
             </th>

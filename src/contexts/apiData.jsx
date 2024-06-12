@@ -19,8 +19,8 @@ export const APIDataProvider = ({ children }) => {
           modified_data.map((item) => item.category)
         );
         const tempArr = Array.from(categoriesSet).map((category) => ({
-          label: category,
-          value: category,
+          label: category.toUpperCase(),
+          value: category.toUpperCase(),
         }));
 
         setFormHeader(Object.keys(modified_data[0]));

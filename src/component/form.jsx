@@ -37,7 +37,8 @@ const Form = () => {
       },
     ]);
 
-    setRowData({title: "", price: ""});
+    setRowData({ title: "", price: "" });
+    setSelectedOptions(null);
   };
 
   const handleChange = (event) => {
@@ -47,7 +48,7 @@ const Form = () => {
   return (
     <div className="form-container">
       <form onSubmit={handleSubmit}>
-        Enter new Details
+        <div style ={headingStyle}>Enter new Details </div>
         <input
           placeholder="Enter title"
           name="title"
@@ -62,6 +63,7 @@ const Form = () => {
         />
         <FilterCategories
           categories={categories}
+          selectedOptions={selectedOptions}
           setSelectedOptions={setSelectedOptions}
           header={"Categories"}
           isMultiProp={false}
@@ -74,3 +76,11 @@ const Form = () => {
 };
 
 export default Form;
+
+const headingStyle = {
+  textAlign: "left",
+  fontSize: "20px",
+  fontWeight: "bold",
+  color: "#000",
+  fontFamily: "Arial, sans-serif"
+};

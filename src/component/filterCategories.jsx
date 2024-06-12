@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 import Select from "react-select";
-import './filterCategories.css';
+import "./filterCategories.css";
 import { useContext } from "react";
 import { APIDataContext } from "../contexts/apiData";
 
@@ -9,9 +9,9 @@ const FilterCategories = ({
   header,
   isMultiProp = true,
   closeMenuOnSelectProp = false,
+  selectedOptions,
 }) => {
-
-  const {categories} = useContext(APIDataContext);
+  const { categories } = useContext(APIDataContext);
 
   // console.log("categories: ", categories);
   // console.log(
@@ -27,14 +27,15 @@ const FilterCategories = ({
 
   return (
     <div className="filter-categories">
-      <div className="filter-categories-header">{header}</div>
+      {/* <div className="filter-categories-header">{header}</div> */}
 
       <Select
         closeMenuOnSelect={closeMenuOnSelectProp}
         isMulti={isMultiProp}
         options={categories}
         onChange={changeSelected}
-        placeholder={"Choose " + header}
+        value={selectedOptions}
+        placeholder={header}
         autoFocus
       />
     </div>
