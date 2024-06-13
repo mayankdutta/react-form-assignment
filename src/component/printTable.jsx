@@ -1,22 +1,41 @@
 /* eslint-disable react/prop-types */
-import FilterCategories from "./filterCategories";
 import { useContext, useState } from "react";
 import "./printTable.css";
 import { APIDataContext } from "../contexts/apiData";
+import TableBody from "./table/body";
+import TableHeader from "./table/header";
 
-const limitNames = (name) => {
-  if (typeof name !== "string") {
-    return name;
-  }
-  return name.length < 20 ? name : name.substring(0, 40) + "...";
-};
 
-const DISABLED_COLUMNS = ["rating", "image", "description"];
+
 
 const PrintTable = () => {
   const { formData } = useContext(APIDataContext);
   const [selectedOptions, setSelectedOptions] = useState([]);
   const { setFormData } = useContext(APIDataContext);
+
+  const sortInc = (col) => {
+    if (typeof col == "string") {
+      setFormData(
+        [...formData].sort((a, b) => {
+          if (a[col] < b[col]) return -1;
+          if (a[col] > b[col]) return 1;
+          return 0;
+        })
+      );
+    } else setFormData([...formData].sort((a, b) => a[col] - b[col]));
+  };
+
+  const sortDec = (col) => {
+    if (typeof col == "string") {
+      setFormData(
+        [...formData].sort((a, b) => {
+          if (a[col] < b[col]) return 1;
+          if (a[col] > b[col]) return -1;
+          return 0;
+        })
+      );
+    } else setFormData([...formData].sort((a, b) => -a[col] + b[col]));
+  };
 
   const filterStuff = (data) => {
     if (selectedOptions.length == 0) {
@@ -42,63 +61,23 @@ const PrintTable = () => {
       <table>
         <thead>
           <tr>
-            <TableHeader setSelectedOptions={setSelectedOptions} />
+            <TableHeader
+              setSelectedOptions={setSelectedOptions}
+              sortInc={sortInc}
+              sortDec={sortDec}
+            />
           </tr>
         </thead>
 
         <tbody>
           {filterStuff(formData).map((data, i) => (
             <tr key={i}>
-              <TableRow data={data} deleteRow={deleteRow} />
+              <TableBody data={data} deleteRow={deleteRow} />
             </tr>
           ))}
         </tbody>
       </table>
     </div>
-  );
-};
-
-const TableRow = ({ data, deleteRow }) => {
-  return (
-    <>
-      {Object.keys(data).map((value) => {
-        if (DISABLED_COLUMNS.includes(value)) return null;
-        else return <td key={value.id}>{limitNames(data[value])}</td>;
-      })}
-      <td>
-        <button onClick={() => deleteRow(data.id)}>X</button>
-      </td>
-    </>
-  );
-};
-
-const TableHeader = ({ setSelectedOptions }) => {
-  const { formHeader } = useContext(APIDataContext);
-
-  return (
-    <>
-      {formHeader.map((header) => {
-        if (DISABLED_COLUMNS.includes(header)) return null;
-        else if (header == "category") {
-          return (
-            <th key={header}>
-              <div className="filter-categories filter-categories-header">
-                {/* <div className="filter-categories-header">
-                  {header.toUpperCase()}
-                </div> */}
-                <FilterCategories
-                  setSelectedOptions={setSelectedOptions}
-                  header={header.toUpperCase()}
-                />
-              </div>
-            </th>
-          );
-        }
-
-        return <th key={header}> {header.toUpperCase()}</th>;
-      })}
-      <th> DELETE </th>
-    </>
   );
 };
 
