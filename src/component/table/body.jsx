@@ -1,14 +1,6 @@
 /* eslint-disable react/prop-types */
 
-const DISABLED_COLUMNS = ["rating", "image", "description"];
-
-
-const limitNames = (name) => {
-  if (typeof name !== "string") {
-    return name;
-  }
-  return name.length < 20 ? name : name.substring(0, 40) + "...";
-};
+import { limitNames, DISABLED_COLUMNS } from "../../utils/extraFunctions";
 
 const TableBody = ({ data, deleteRow }) => {
   return (

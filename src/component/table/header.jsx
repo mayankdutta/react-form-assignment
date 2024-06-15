@@ -3,8 +3,8 @@
 import { useContext } from "react";
 import { APIDataContext } from "../../contexts/apiData";
 import FilterCategories from "../filterCategories";
+import { DISABLED_COLUMNS } from "../../utils/extraFunctions";
 
-const DISABLED_COLUMNS = ["rating", "image", "description"];
 const SORTING_COLUMNS = ["title", "price", "id"];
 
 const TableHeader = ({ setSelectedOptions, sortInc, sortDec }) => {

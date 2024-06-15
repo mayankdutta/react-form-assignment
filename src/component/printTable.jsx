@@ -1,49 +1,15 @@
 /* eslint-disable react/prop-types */
-import { useContext, useReducer, useState } from "react";
+import { useContext, useState } from "react";
 import "./printTable.css";
-import { APIDataContext } from "../contexts/apiData";
 import TableBody from "./table/body";
 import TableHeader from "./table/header";
-
-const tableReducer = (state, action) => {
-  const { col, id } = action;
-
-  switch (action.type) {
-    case "sortInc": {
-      return typeof col == "string"
-        ? [...state].sort((a, b) => {
-            if (a[col] < b[col]) return -1;
-            if (a[col] > b[col]) return 1;
-            return 0;
-          })
-        : [...state``].sort((a, b) => a[col] - b[col]);
-    }
-
-    case "sortDec": {
-      return typeof col == "string"
-        ? [...state].sort((a, b) => {
-            if (a[col] < b[col]) return 11;
-            if (a[col] > b[col]) return -1;
-            return 0;
-          })
-        : [...state].sort((a, b) => -a[col] + b[col]);
-    }
-
-    case "delete":
-      console.log("iam here, id: ", id);
-      return state.filter((i) => i.id !== id);
-
-    default:
-      throw new Error("unhandled action ", action.type);
-  }
-};
+import Footer from "./table/footer";
+import { APIDataContext } from "../contexts/apiData";
 
 const PrintTable = () => {
-  const { formData } = useContext(APIDataContext);
+  const { useTableReducer, loading } = useContext(APIDataContext);
+  const { state, dispatch } = useTableReducer();
   const [selectedOptions, setSelectedOptions] = useState([]);
-  const { setFormData } = useContext(APIDataContext);
-
-  const [state, dispatch] = useReducer(tableReducer, formData);
 
   const sortInc = (col) => dispatch({ type: "sortInc", col });
   const sortDec = (col) => dispatch({ type: "sortDec", col });
@@ -63,26 +29,48 @@ const PrintTable = () => {
   return (
     <div className="table-container">
       <table>
+        {loading && <h1 style={loadingStyle}>Loading ... </h1>}
+
         <thead>
           <tr>
-            <TableHeader
-              setSelectedOptions={setSelectedOptions}
-              sortInc={sortInc}
-              sortDec={sortDec}
-            />
+            {!loading && (
+              <TableHeader
+                setSelectedOptions={setSelectedOptions}
+                sortInc={sortInc}
+                sortDec={sortDec}
+              />
+            )}
           </tr>
         </thead>
 
         <tbody>
-          {filterStuff(state).map((data, i) => (
-            <tr key={i}>
-              <TableBody data={data} deleteRow={deleteRow} />
-            </tr>
-          ))}
+          {!loading &&
+            filterStuff(state).map((data, i) => (
+              <tr key={i}>
+                <TableBody data={data} deleteRow={deleteRow} />
+              </tr>
+            ))}
         </tbody>
+
+        <tfoot>
+          <tr>
+            <Footer />
+          </tr>
+        </tfoot>
       </table>
     </div>
   );
 };
 
 export default PrintTable;
+
+const loadingStyle = {
+  textAlign: "left",
+  padding: "10px 15px",
+  fontSize: "40px",
+  fontWeight: "bold",
+  color: "#000",
+  fontFamily: "Arial, sans-serif",
+  textAlign: "center",
+  backgroundColor: "#f4f4f4",
+};

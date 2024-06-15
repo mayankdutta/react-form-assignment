@@ -1,5 +1,6 @@
 /* eslint-disable react/prop-types */
-import { createContext, useEffect, useState } from "react";
+import { createContext, useEffect, useState, useReducer } from "react";
+import tableReducer from "../reducer/tableReducer";
 
 export const APIDataContext = createContext();
 
@@ -8,6 +9,8 @@ export const APIDataProvider = ({ children }) => {
   const [formHeader, setFormHeader] = useState([]);
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
+
+  const [state, dispatch] = useReducer(tableReducer, []);
 
   useEffect(() => {
     async function getData() {
@@ -29,19 +32,28 @@ export const APIDataProvider = ({ children }) => {
       } catch (error) {
         console.log(error.message);
       } finally {
-        setLoading(false); 
+        setLoading(false);
       }
     }
 
     getData();
   }, []);
 
+  useEffect(() => {
+    dispatch({ type: "initialize", data: formData });
+  }, [formData]);
+
+  const useTableReducer = () => {
+    return { state, dispatch };
+  };
+
   const value = {
     formData,
     formHeader,
     categories,
     loading,
-    setFormData
+    setFormData,
+    useTableReducer,
   };
   return (
     <APIDataContext.Provider value={value}>{children}</APIDataContext.Provider>
