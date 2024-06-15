@@ -1,6 +1,7 @@
 /* eslint-disable react/prop-types */
 
 import { limitNames, DISABLED_COLUMNS } from "../../utils/extraFunctions";
+import { Button } from "../../styles/styles";
 
 const TableBody = ({ data, deleteRow }) => {
   return (
@@ -10,7 +11,7 @@ const TableBody = ({ data, deleteRow }) => {
         else return <td key={value.id}>{limitNames(data[value])}</td>;
       })}
       <td>
-        <button onClick={() => deleteRow(data.id)}>X</button>
+        <Button variant='delete' onClick={() => deleteRow(data.id)}><span>&#10539;</span></Button>
       </td>
     </>
   );

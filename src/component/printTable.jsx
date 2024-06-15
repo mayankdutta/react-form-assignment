@@ -1,10 +1,12 @@
 /* eslint-disable react/prop-types */
 import { useContext, useState } from "react";
-import "./printTable.css";
+// import "./printTable.css";
 import TableBody from "./table/body";
 import TableHeader from "./table/header";
 import Footer from "./table/footer";
 import { APIDataContext } from "../contexts/apiData";
+
+import { Table, TableContainer, Thead, Tbody, Tfoot } from "../styles/styles";
 
 const PrintTable = () => {
   const { useTableReducer, loading } = useContext(APIDataContext);
@@ -27,11 +29,11 @@ const PrintTable = () => {
   };
 
   return (
-    <div className="table-container">
-      <table>
-        {loading && <h1 style={loadingStyle}>Loading ... </h1>}
+    <TableContainer>
+      <Table>
+        {loading && <h1>Loading ... </h1>}
 
-        <thead>
+        <Thead>
           <tr>
             {!loading && (
               <TableHeader
@@ -41,36 +43,25 @@ const PrintTable = () => {
               />
             )}
           </tr>
-        </thead>
+        </Thead>
 
-        <tbody>
+        <Tbody>
           {!loading &&
             filterStuff(state).map((data, i) => (
               <tr key={i}>
                 <TableBody data={data} deleteRow={deleteRow} />
               </tr>
             ))}
-        </tbody>
+        </Tbody>
 
-        <tfoot>
+        <Tfoot>
           <tr>
             <Footer />
           </tr>
-        </tfoot>
-      </table>
-    </div>
+        </Tfoot>
+      </Table>
+    </TableContainer>
   );
 };
 
 export default PrintTable;
-
-const loadingStyle = {
-  textAlign: "left",
-  padding: "10px 15px",
-  fontSize: "40px",
-  fontWeight: "bold",
-  color: "#000",
-  fontFamily: "Arial, sans-serif",
-  textAlign: "center",
-  backgroundColor: "#f4f4f4",
-};

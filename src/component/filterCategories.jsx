@@ -1,8 +1,9 @@
 /* eslint-disable react/prop-types */
 import Select from "react-select";
-import "./filterCategories.css";
+// import "./filterCategories.css";
 import { useContext } from "react";
 import { APIDataContext } from "../contexts/apiData";
+import { customStyles } from "../styles/SelectStyles";
 
 const FilterCategories = ({
   setSelectedOptions,
@@ -37,6 +38,7 @@ const FilterCategories = ({
         value={selectedOptions}
         placeholder={header}
         autoFocus
+        styles={{customStyles}}
       />
     </div>
   );

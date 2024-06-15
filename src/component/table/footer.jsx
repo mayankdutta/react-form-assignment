@@ -1,6 +1,7 @@
 import { useContext, useState } from "react";
 import FilterCategories from "../filterCategories";
 import { APIDataContext } from "../../contexts/apiData";
+import { Button, Input } from "../../styles/styles";
 
 const Footer = () => {
   const { useTableReducer } = useContext(APIDataContext);
@@ -36,7 +37,7 @@ const Footer = () => {
       <td>ID</td>
 
       <td>
-        <input
+        <Input
           placeholder="Enter title"
           name="title"
           value={rowData.title}
@@ -45,7 +46,7 @@ const Footer = () => {
       </td>
 
       <td>
-        <input
+        <Input
           placeholder="Enter Price"
           name="price"
           value={rowData.price}
@@ -64,9 +65,11 @@ const Footer = () => {
         />
       </td>
       <td>
-        <button type="submit" onClick={handleSubmit}>
-          +
-        </button>
+        <Button variant='submit' type="submit" onClick={handleSubmit}>
+        
+        <span>&#10010;</span>
+
+        </Button>
       </td>
     </>
   );

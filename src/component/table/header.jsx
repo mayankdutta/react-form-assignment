@@ -29,9 +29,13 @@ const TableHeader = ({ setSelectedOptions, sortInc, sortDec }) => {
           return (
             <>
               <th key={header}>
-                <button onClick={() => sortInc(header)}>Inc</button>
+                <button onClick={() => sortInc(header)}>
+                  <span>&#8593;</span>
+                </button>
                 {" " + header.toUpperCase() + " "}
-                <button onClick={() => sortDec(header)}>Dec</button>
+                <button onClick={() => sortDec(header)}>
+                  <span>&#8595;</span>
+                </button>
               </th>
             </>
           );
