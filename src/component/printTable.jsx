@@ -7,6 +7,7 @@ import Footer from "./table/footer";
 import { APIDataContext } from "../contexts/apiData";
 
 import { Table, TableContainer, Thead, Tbody, Tfoot } from "../styles/styles";
+import AgGrid from "./AgGrid";
 
 const PrintTable = () => {
   const { useTableReducer, loading } = useContext(APIDataContext);
@@ -28,6 +29,8 @@ const PrintTable = () => {
     });
   };
 
+  return <AgGrid />
+  
   return (
     <TableContainer>
       <Table>

@@ -4,6 +4,9 @@ import FilterCategories from "./filterCategories";
 import { APIDataContext } from "../contexts/apiData";
 import "./form.css";
 
+import { AgGridReact } from 'ag-grid-react'; // React Data Grid Component
+import "ag-grid-community/styles/ag-grid.css"; // Mandatory CSS required by the grid
+
 const Form = () => {
   const { categories, formData, setFormData } = useContext(APIDataContext);
 
@@ -16,16 +19,6 @@ const Form = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-
-    // console.log("checking form data: ", formData);
-
-    // console.log(
-    //   "checking form submit: ",
-    //   formData.length ? formData[formData.length - 1].id + 1 : 1,
-    //   rowData.title,
-    //   rowData.price,
-    //   selectedOptions.label
-    // );
 
     setFormData([
       ...formData,
