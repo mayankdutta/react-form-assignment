@@ -6,12 +6,10 @@ import { DISABLED_COLUMNS } from "../utils/extraFunctions";
 export const APIDataContext = createContext();
 
 export const APIDataProvider = ({ children }) => {
-  const [formData, setFormData] = useState([]);
   const [formHeader, setFormHeader] = useState([]);
   const [categories, setCategories] = useState([]);
-  const [loading, setLoading] = useState(true);
 
-  const [state, dispatch] = useReducer(tableReducer, []);
+  const [formDataState, dispatch] = useReducer(tableReducer, []);
 
   useEffect(() => {
     async function getData() {
@@ -27,46 +25,68 @@ export const APIDataProvider = ({ children }) => {
           value: category.toUpperCase(),
         }));
 
-        modified_data = modified_data.map(({image, rating, ...rest}) => ({...rest}));
+        modified_data = modified_data.map(
+          ({ image, rating, description, ...rest }) => ({
+            ...rest,
+          })
+        );
         // console.log('printing stuff: ', modified_data)
 
-        setFormHeader(
-          Object.keys(modified_data[0])
-            .filter((val) => !DISABLED_COLUMNS.includes(val))
-            .map((t) => {
-              return { field: t };
-            })
-        );
+        let tempFormHeader = Object.keys(modified_data[0])
+          .filter((val) => !DISABLED_COLUMNS.includes(val))
+          .map((t) => {
+            return { field: t };
+          });
 
-        setFormData(modified_data);
+        // tempFormHeader.add({ field: "Delete" });
+        setFormHeader(tempFormHeader);
+
+        // setFormData([...modified_data,  ...extraData(100)]);
+        dispatch({
+          type: "initialize",
+          data: [...modified_data, ...extraData(100)],
+        });
         setCategories(tempArr);
       } catch (error) {
         console.log(error.message);
-      } finally {
-        setLoading(false);
       }
     }
 
     getData();
   }, []);
 
-  useEffect(() => {
-    dispatch({ type: "initialize", data: formData });
-  }, [formData]);
-
   const useTableReducer = () => {
-    return { state, dispatch };
+    return { state: formDataState, dispatch };
   };
 
   const value = {
-    formData,
+    formData: formDataState,
     formHeader,
     categories,
-    loading,
-    setFormData,
     useTableReducer,
   };
   return (
     <APIDataContext.Provider value={value}>{children}</APIDataContext.Provider>
   );
 };
+
+function extraData(N) {
+  let arr = [];
+  let categoryArr = [
+    "men's clothing",
+    "jewelery",
+    "electronics",
+    "women's clothing",
+  ];
+  for (let i = 21; i <= N; i++) {
+    // console.log('categories : ', categoryArr[parseInt(Math.random() * 4)])
+    arr.push({
+      id: i,
+      title: `Random Title ${i}`,
+      price: Math.random() * 1000,
+      category: categoryArr[parseInt(Math.random() * 4)],
+    });
+  }
+
+  return arr;
+}

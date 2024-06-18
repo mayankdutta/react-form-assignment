@@ -20,15 +20,11 @@ const Footer = () => {
   };
 
   const handleSubmit = () => {
-    // event.preventDefault();
-
-    // console.log("row data: ", rowData);
-
     dispatch({
       type: "add",
       title: rowData.title,
-      price: rowData.price,
-      category: selectedOptions.label,
+      price: parseInt(rowData.price),
+      category: (selectedOptions.label.toLowerCase()),
     });
   };
 

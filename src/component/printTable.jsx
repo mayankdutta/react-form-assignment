@@ -11,32 +11,15 @@ import AgGrid from "./AgGrid";
 
 const PrintTable = () => {
   const { useTableReducer, loading } = useContext(APIDataContext);
-  const { state, dispatch } = useTableReducer();
-  const [selectedOptions, setSelectedOptions] = useState([]);
 
-  const sortInc = (col) => dispatch({ type: "sortInc", col });
-  const sortDec = (col) => dispatch({ type: "sortDec", col });
-  const deleteRow = (id) => dispatch({ type: "delete", id });
-
-  const filterStuff = (data) => {
-    if (selectedOptions.length == 0) {
-      return data;
-    }
-    return data.filter((d) => {
-      return selectedOptions.find((value) => {
-        return value.label === d.category.toUpperCase();
-      });
-    });
-  };
-
-  return <AgGrid />
-  
   return (
+    <>
+    <AgGrid />
     <TableContainer>
       <Table>
         {loading && <h1>Loading ... </h1>}
 
-        <Thead>
+        {/* <Thead>
           <tr>
             {!loading && (
               <TableHeader
@@ -55,7 +38,7 @@ const PrintTable = () => {
                 <TableBody data={data} deleteRow={deleteRow} />
               </tr>
             ))}
-        </Tbody>
+        </Tbody> */}
 
         <Tfoot>
           <tr>
@@ -64,6 +47,8 @@ const PrintTable = () => {
         </Tfoot>
       </Table>
     </TableContainer>
+
+    </>
   );
 };
 
