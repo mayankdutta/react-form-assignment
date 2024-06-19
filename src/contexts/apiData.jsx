@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 import { createContext, useEffect, useState, useReducer } from "react";
-import tableReducer from "../reducer/tableReducer";
+import tableReducer, { REDUCER_TYPE } from "../reducer/tableReducer";
 import { DISABLED_COLUMNS } from "../utils/extraFunctions";
 
 export const APIDataContext = createContext();
@@ -18,7 +18,7 @@ export const APIDataProvider = ({ children }) => {
         let modified_data = await data.json();
 
         const categoriesSet = new Set(
-          modified_data.map((item) => item.category)
+          modified_data.map((item) => item.category),
         );
         const tempArr = Array.from(categoriesSet).map((category) => ({
           label: category.toUpperCase(),
@@ -28,8 +28,13 @@ export const APIDataProvider = ({ children }) => {
         modified_data = modified_data.map(
           ({ image, rating, description, ...rest }) => ({
             ...rest,
-          })
+          }),
         );
+
+        modified_data = modified_data.map((data) => ({
+          ...data,
+          price: parseFloat(data.price).toFixed(2),
+        }));
         // console.log('printing stuff: ', modified_data)
 
         let tempFormHeader = Object.keys(modified_data[0])
@@ -43,8 +48,8 @@ export const APIDataProvider = ({ children }) => {
 
         // setFormData([...modified_data,  ...extraData(100)]);
         dispatch({
-          type: "initialize",
-          data: [...modified_data, ...extraData(100)],
+          type: REDUCER_TYPE.INITIALIZE,
+          data: modified_data,
         });
         setCategories(tempArr);
       } catch (error) {
@@ -83,7 +88,7 @@ function extraData(N) {
     arr.push({
       id: i,
       title: `Random Title ${i}`,
-      price: Math.random() * 1000,
+      price: (Math.random() * 1000).toFixed(2),
       category: categoryArr[parseInt(Math.random() * 4)],
     });
   }

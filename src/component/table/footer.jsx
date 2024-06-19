@@ -2,6 +2,7 @@ import { useContext, useState } from "react";
 import FilterCategories from "../filterCategories";
 import { APIDataContext } from "../../contexts/apiData";
 import { Button, Input } from "../../styles/styles";
+import { REDUCER_TYPE } from "../../reducer/tableReducer";
 
 const Footer = () => {
   const { useTableReducer } = useContext(APIDataContext);
@@ -21,7 +22,7 @@ const Footer = () => {
 
   const handleSubmit = () => {
     dispatch({
-      type: "add",
+      type: REDUCER_TYPE.ADD,
       title: rowData.title,
       price: parseInt(rowData.price),
       category: (selectedOptions.label.toLowerCase()),

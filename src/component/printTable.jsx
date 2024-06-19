@@ -14,12 +14,12 @@ const PrintTable = () => {
 
   return (
     <>
-    <AgGrid />
-    <TableContainer>
-      <Table>
-        {loading && <h1>Loading ... </h1>}
+      <AgGrid />
+      <TableContainer>
+        <Table>
+          {loading && <h1>Loading ... </h1>}
 
-        {/* <Thead>
+          {/* <Thead>
           <tr>
             {!loading && (
               <TableHeader
@@ -40,14 +40,13 @@ const PrintTable = () => {
             ))}
         </Tbody> */}
 
-        <Tfoot>
-          <tr>
-            <Footer />
-          </tr>
-        </Tfoot>
-      </Table>
-    </TableContainer>
-
+          <Tfoot>
+            <tr>
+              <Footer />
+            </tr>
+          </Tfoot>
+        </Table>
+      </TableContainer>
     </>
   );
 };
