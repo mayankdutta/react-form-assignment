@@ -17,15 +17,14 @@ const tableReducer = (state, action) => {
     }
 
     case "INITIALIZE": {
-      console.log("initializing data");
       return action.data;
     }
 
     case "EXTRA_ROW": {
-      console.log("adding extra row");
-      const newData = [...state, ...extraData(state.length, action.extraRows)];
-      console.log(newData);
-      return [...state, ...extraData(state.length, action.extraRows)];
+      // const newData = [...state, ...extraData(state.length, action.extraRows)];
+      // console.log(newData);
+
+      return [...state, ...action.extraRows];
     }
 
     default:
@@ -40,24 +39,4 @@ export const REDUCER_TYPE = {
   EXTRA_ROW: "EXTRA_ROW",
 };
 
-function extraData(currLength, N) {
-  let arr = [];
-  let categoryArr = [
-    "men's clothing",
-    "jewelery",
-    "electronics",
-    "women's clothing",
-  ];
-  for (let i = currLength; i <= currLength + N; i++) {
-    // console.log('categories : ', categoryArr[parseInt(Math.random() * 4)])
-    arr.push({
-      id: i,
-      title: `Random Title ${i}`,
-      price: (Math.random() * 1000).toFixed(2),
-      category: categoryArr[parseInt(Math.random() * 4)],
-    });
-  }
-
-  return arr;
-}
 export default tableReducer;

@@ -1,13 +1,11 @@
-/*
- * TODO
- * update sales price.
- * button to add 10 more rows at the bottom
- *
- */
-
-import { useMemo, useContext, useRef, useState, useCallback } from "react";
+import {
+  useMemo,
+  useContext,
+  useRef,
+  useState,
+  useCallback,
+} from "react";
 import { APIDataContext } from "../contexts/apiData";
-
 import { REDUCER_TYPE } from "../reducer/tableReducer";
 import { AgGridReact } from "ag-grid-react"; // React Data Grid Component
 import "ag-grid-community/styles/ag-grid.css"; // Mandatory CSS required by the grid
@@ -17,6 +15,7 @@ const AgGrid = () => {
   const { useTableReducer } = useContext(APIDataContext);
   const { dispatch } = useTableReducer();
 
+  const trackUpdateRows = useRef([]); 
   const gridRef = useRef();
 
   const { formData, formHeader } = useContext(APIDataContext);
@@ -48,25 +47,33 @@ const AgGrid = () => {
       minWidth: 100,
       filter: true,
       enableCellChangeFlash: true,
+
       cellStyle: { textAlign: "left" },
     };
   }, []);
 
-  const getRowStyle = (params) => {
+
+
+  let getRowStyle = (params) => {
     // console.log(params);
     // console.log(params.node);
 
+    console.log('rows redrawn ', trackUpdateRows.current, params.node.rowIndex)
+    if (trackUpdateRows.current.includes(params.node.rowIndex + 1)) {
+      return { backgroundColor: "#91DDCF", border: '2px solid red' };
+    }
     if (params.node.rowIndex % 2 == 0) {
       return { backgroundColor: "#EEEEEE" };
     }
   };
+
 
   const handleDelete = (id) => {
     dispatch({ type: REDUCER_TYPE.DELETE, id: parseInt(id) });
   };
 
   const handleUpdatePrice = () => {
-    console.log("form data: ", formData);
+    // console.log("form data: ", formData);
 
     const newData = [...formData].map((data) => {
       let chance = Math.random();
@@ -83,8 +90,8 @@ const AgGrid = () => {
       };
     });
 
-    console.log(newData);
-    console.log("checking reducer: ", REDUCER_TYPE.INITIALIZE);
+    // console.log("checking reducer: ", REDUCER_TYPE.INITIALIZE);
+
     dispatch({ type: REDUCER_TYPE.INITIALIZE, data: newData });
   };
 
@@ -108,25 +115,25 @@ const AgGrid = () => {
       dispatch({ type: REDUCER_TYPE.DELETE, id: parseInt(node) });
     });
 
-    console.log("selected nodes: ", selectedNodes);
+    // console.log("selected nodes: ", selectedNodes);
   };
 
-  const handleClickRow = (params) => {
-    // console.log(params.data);
-    // console.log(params.node);
-    // console.log(params.api);
-    // params.api.forEachNode((node) => {
-    //   console.log(node.data.id, node.isSelected());
-    // });
-    // setSelectedRow([...selectedRow, params.data]);
-  };
+  const handleClickRow = (params) => {};
 
   const getRowId = useCallback((params) => {
+    "";
     return params.data.id;
   }, []);
 
   const handleExtraRows = () => {
-    dispatch({ type: REDUCER_TYPE.EXTRA_ROW, extraRows: 10 });
+    const newRows = extraData(formData.length, 10);
+    trackUpdateRows.current = (newRows.map(row => row.id));
+    dispatch({ type: REDUCER_TYPE.EXTRA_ROW, extraRows: newRows });
+    gridRef.current.api.redrawRows();
+  };
+
+  const onCellValueChange = (params) => {
+    console.log("cell value change: ", params);
   };
 
   return (
@@ -146,12 +153,37 @@ const AgGrid = () => {
           getRowStyle={getRowStyle}
           rowSelection="multiple"
           columnDefs={colDefs}
+          cellFadeDuration={20000}
+          cellFlashDuration={200000}
           ref={gridRef}
           defaultColDef={defaultColDef}
           onRowClicked={handleClickRow}
+          onCellValueChanged={onCellValueChange}
         />
       </div>
     </>
   );
 };
+
+function extraData(currLength, N) {
+  let arr = [];
+  let categoryArr = [
+    "men's clothing",
+    "jewelery",
+    "electronics",
+    "women's clothing",
+  ];
+  for (let i = currLength + 1; i <= currLength + N; i++) {
+    // console.log('categories : ', categoryArr[parseInt(Math.random() * 4)])
+    arr.push({
+      id: i,
+      title: `Random Title ${i}`,
+      price: (Math.random() * 1000).toFixed(2),
+      category: categoryArr[parseInt(Math.random() * 4)],
+    });
+  }
+
+  return arr;
+}
+
 export default AgGrid;

@@ -74,24 +74,3 @@ export const APIDataProvider = ({ children }) => {
     <APIDataContext.Provider value={value}>{children}</APIDataContext.Provider>
   );
 };
-
-function extraData(N) {
-  let arr = [];
-  let categoryArr = [
-    "men's clothing",
-    "jewelery",
-    "electronics",
-    "women's clothing",
-  ];
-  for (let i = 21; i <= N; i++) {
-    // console.log('categories : ', categoryArr[parseInt(Math.random() * 4)])
-    arr.push({
-      id: i,
-      title: `Random Title ${i}`,
-      price: (Math.random() * 1000).toFixed(2),
-      category: categoryArr[parseInt(Math.random() * 4)],
-    });
-  }
-
-  return arr;
-}
