@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import { createContext, useEffect, useState, useReducer } from "react";
+import { createContext, useEffect, useState, useReducer, useRef } from "react";
 import tableReducer, { REDUCER_TYPE } from "../reducer/tableReducer";
 import { DISABLED_COLUMNS } from "../utils/extraFunctions";
 
@@ -8,7 +8,6 @@ export const APIDataContext = createContext();
 export const APIDataProvider = ({ children }) => {
   const [formHeader, setFormHeader] = useState([]);
   const [categories, setCategories] = useState([]);
-
   const [formDataState, dispatch] = useReducer(tableReducer, []);
 
   useEffect(() => {

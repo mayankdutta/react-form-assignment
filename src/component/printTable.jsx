@@ -42,7 +42,7 @@ const PrintTable = () => {
 
           <Tfoot>
             <tr>
-              <Footer />
+              {/* <Footer /> */}
             </tr>
           </Tfoot>
         </Table>

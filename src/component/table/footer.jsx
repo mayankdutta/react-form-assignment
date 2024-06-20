@@ -1,11 +1,12 @@
+/* eslint-disable react/prop-types */
 import { useContext, useState } from "react";
 import FilterCategories from "../filterCategories";
 import { APIDataContext } from "../../contexts/apiData";
 import { Button, Input } from "../../styles/styles";
 import { REDUCER_TYPE } from "../../reducer/tableReducer";
 
-const Footer = () => {
-  const { useTableReducer } = useContext(APIDataContext);
+const Footer = ({ gridRef, trackUpdateRows }) => {
+  const { useTableReducer, formData } = useContext(APIDataContext);
   const { dispatch } = useTableReducer();
   const { categories } = useContext(APIDataContext);
 
@@ -21,12 +22,16 @@ const Footer = () => {
   };
 
   const handleSubmit = () => {
+    trackUpdateRows.current = [formData.length + 1];
+
     dispatch({
       type: REDUCER_TYPE.ADD,
       title: rowData.title,
       price: parseInt(rowData.price),
-      category: (selectedOptions.label.toLowerCase()),
+      category: selectedOptions.label?.toLowerCase(),
     });
+
+    gridRef.current.api.redrawRows();
   };
 
   return (
@@ -62,10 +67,8 @@ const Footer = () => {
         />
       </td>
       <td>
-        <Button variant='submit' type="submit" onClick={handleSubmit}>
-        
-        <span>&#10010;</span>
-
+        <Button variant="submit" type="submit" onClick={handleSubmit}>
+          <span>&#10010;</span>
         </Button>
       </td>
     </>

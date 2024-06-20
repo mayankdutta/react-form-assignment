@@ -1,22 +1,20 @@
-import {
-  useMemo,
-  useContext,
-  useRef,
-  useState,
-  useCallback,
-} from "react";
+import { useMemo, useContext, useRef, useState, useCallback } from "react";
 import { APIDataContext } from "../contexts/apiData";
 import { REDUCER_TYPE } from "../reducer/tableReducer";
 import { AgGridReact } from "ag-grid-react"; // React Data Grid Component
 import "ag-grid-community/styles/ag-grid.css"; // Mandatory CSS required by the grid
 import "ag-grid-community/styles/ag-theme-quartz.css"; // Optional Theme applied to the grid
 
+import Footer from "./table/footer";
+import { Table, TableContainer, Tfoot } from "../styles/styles";
+import { extraData } from "../utils/extraFunctions";
+
 const AgGrid = () => {
   const { useTableReducer } = useContext(APIDataContext);
   const { dispatch } = useTableReducer();
 
-  const trackUpdateRows = useRef([]); 
-  const gridRef = useRef();
+  const gridRef = useRef(null);
+  const trackUpdateRows = useRef([]);
 
   const { formData, formHeader } = useContext(APIDataContext);
   const [colDefs, setCallDefs] = useState([
@@ -52,45 +50,41 @@ const AgGrid = () => {
     };
   }, []);
 
-
-
   let getRowStyle = (params) => {
-    // console.log(params);
-    // console.log(params.node);
+    const isUpdatedRow = trackUpdateRows.current.includes(
+      params.node.rowIndex + 1
+    );
+    const isEvenRow = params.node.rowIndex % 2 == 0;
 
-    console.log('rows redrawn ', trackUpdateRows.current, params.node.rowIndex)
-    if (trackUpdateRows.current.includes(params.node.rowIndex + 1)) {
-      return { backgroundColor: "#91DDCF", border: '2px solid red' };
+    const style = { backgroundColor: "white" };
+
+    if (isEvenRow) {
+      style.backgroundColor = "#EEEEEE";
     }
-    if (params.node.rowIndex % 2 == 0) {
-      return { backgroundColor: "#EEEEEE" };
+    if (isUpdatedRow) {
+      style.border = "2px solid #3DC2EC";
     }
+
+    return style;
   };
 
-
-  const handleDelete = (id) => {
+  const handleDelete = (id) =>
     dispatch({ type: REDUCER_TYPE.DELETE, id: parseInt(id) });
-  };
 
   const handleUpdatePrice = () => {
-    // console.log("form data: ", formData);
-
     const newData = [...formData].map((data) => {
       let chance = Math.random();
       if (chance > 0.5) {
         return data;
       }
 
-      return {
-        ...data,
-        price:
-          chance < 0.2
-            ? ((9 * data.price) / 10).toFixed(2)
-            : ((11 * data.price) / 10).toFixed(2),
-      };
-    });
+      const updatedPrice =
+        chance < 0.2
+          ? (0.9 * data.price).toFixed(2)
+          : (1.1 * data.price).toFixed(2);
 
-    // console.log("checking reducer: ", REDUCER_TYPE.INITIALIZE);
+      return { ...data, price: updatedPrice };
+    });
 
     dispatch({ type: REDUCER_TYPE.INITIALIZE, data: newData });
   };
@@ -114,30 +108,18 @@ const AgGrid = () => {
     selectedNodesId.forEach((node) => {
       dispatch({ type: REDUCER_TYPE.DELETE, id: parseInt(node) });
     });
-
-    // console.log("selected nodes: ", selectedNodes);
   };
 
-  const handleClickRow = (params) => {};
-
-  const getRowId = useCallback((params) => {
-    "";
-    return params.data.id;
-  }, []);
+  const getRowId = useCallback((params) => params.data.id, []);
 
   const handleExtraRows = () => {
     const newRows = extraData(formData.length, 10);
-    trackUpdateRows.current = (newRows.map(row => row.id));
+    trackUpdateRows.current = newRows.map((row) => row.id);
     dispatch({ type: REDUCER_TYPE.EXTRA_ROW, extraRows: newRows });
     gridRef.current.api.redrawRows();
   };
 
-  const onCellValueChange = (params) => {
-    console.log("cell value change: ", params);
-  };
-
   return (
-    // wrapping container with theme & size
     <>
       <button onClick={handleDeleteMultipleRows}> Delete Selected Rows </button>
       <button onClick={handleUpdatePrice}> Update Price for Sales</button>
@@ -157,33 +139,19 @@ const AgGrid = () => {
           cellFlashDuration={200000}
           ref={gridRef}
           defaultColDef={defaultColDef}
-          onRowClicked={handleClickRow}
-          onCellValueChanged={onCellValueChange}
         />
       </div>
+      <TableContainer>
+        <Table>
+          <Tfoot>
+            <tr>
+              <Footer gridRef={gridRef} trackUpdateRows={trackUpdateRows} />
+            </tr>
+          </Tfoot>
+        </Table>
+      </TableContainer>
     </>
   );
 };
-
-function extraData(currLength, N) {
-  let arr = [];
-  let categoryArr = [
-    "men's clothing",
-    "jewelery",
-    "electronics",
-    "women's clothing",
-  ];
-  for (let i = currLength + 1; i <= currLength + N; i++) {
-    // console.log('categories : ', categoryArr[parseInt(Math.random() * 4)])
-    arr.push({
-      id: i,
-      title: `Random Title ${i}`,
-      price: (Math.random() * 1000).toFixed(2),
-      category: categoryArr[parseInt(Math.random() * 4)],
-    });
-  }
-
-  return arr;
-}
 
 export default AgGrid;
