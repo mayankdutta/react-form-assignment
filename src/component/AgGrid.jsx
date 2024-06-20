@@ -54,16 +54,12 @@ const AgGrid = () => {
     const isUpdatedRow = trackUpdateRows.current.includes(
       params.node.rowIndex + 1
     );
-    const isEvenRow = params.node.rowIndex % 2 == 0;
 
+    const isEvenRow = params.node.rowIndex % 2 == 0;
     const style = { backgroundColor: "white" };
 
-    if (isEvenRow) {
-      style.backgroundColor = "#EEEEEE";
-    }
-    if (isUpdatedRow) {
-      style.border = "2px solid #3DC2EC";
-    }
+    if (isEvenRow) style.backgroundColor = "#EEEEEE";
+    if (isUpdatedRow) style.border = "2px solid #3DC2EC";
 
     return style;
   };
@@ -110,7 +106,7 @@ const AgGrid = () => {
     });
   };
 
-  const getRowId = useCallback((params) => params.data.id, []);
+  const getRowId = (params) => params.data.id + params.data.title;
 
   const handleExtraRows = () => {
     const newRows = extraData(formData.length, 10);
@@ -135,8 +131,9 @@ const AgGrid = () => {
           getRowStyle={getRowStyle}
           rowSelection="multiple"
           columnDefs={colDefs}
-          cellFadeDuration={20000}
-          cellFlashDuration={200000}
+          cellFlashDuration={400000} // Flash for 1 second
+          cellFadeDuration={400000} // Fade for 2 seconds
+          animateRows={true}
           ref={gridRef}
           defaultColDef={defaultColDef}
         />

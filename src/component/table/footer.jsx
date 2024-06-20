@@ -32,6 +32,8 @@ const Footer = ({ gridRef, trackUpdateRows }) => {
     });
 
     gridRef.current.api.redrawRows();
+
+    console.log('trackupdates @footer: ', trackUpdateRows); 
   };
 
   return (
