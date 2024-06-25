@@ -46,6 +46,7 @@ export const APIDataProvider = ({ children }) => {
         setFormHeader(tempFormHeader);
 
         // setFormData([...modified_data,  ...extraData(100)]);
+
         dispatch({
           type: REDUCER_TYPE.INITIALIZE,
           data: modified_data,

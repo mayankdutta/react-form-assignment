@@ -33,12 +33,12 @@ const Footer = ({ gridRef, trackUpdateRows }) => {
 
     gridRef.current.api.redrawRows();
 
-    console.log('trackupdates @footer: ', trackUpdateRows); 
+    console.log("trackupdates @footer: ", trackUpdateRows);
   };
 
   return (
     <>
-      <td>ID</td>
+      <td>{formData.length + 1}</td>
 
       <td>
         <Input

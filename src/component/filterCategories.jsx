@@ -14,20 +14,13 @@ const FilterCategories = ({
 }) => {
   const { categories } = useContext(APIDataContext);
 
-  // console.log("categories: ", categories);
-  // console.log(
-  //   "checking react-select props: ",
-  //   isMultiProp,
-  //   closeMenuOnSelectProp
-  // );
-
   const changeSelected = (selected) => {
     // console.log("checking selected : ", Object.values(selected));
     setSelectedOptions(selected);
   };
 
   return (
-    <div className="filter-categories">
+    <div className="filter-categories"> 
       {/* <div className="filter-categories-header">{header}</div> */}
 
       <Select
@@ -36,9 +29,9 @@ const FilterCategories = ({
         options={categories}
         onChange={changeSelected}
         value={selectedOptions}
-        placeholder={header}
+        placeholder={header.length ? header : selectedOptions}
         autoFocus
-        styles={{customStyles}}
+        styles={{ customStyles }}
       />
     </div>
   );

@@ -11,7 +11,9 @@ const TableBody = ({ data, deleteRow }) => {
         else return <td key={value.id}>{limitNames(data[value])}</td>;
       })}
       <td>
-        <Button variant='delete' onClick={() => deleteRow(data.id)}><span>&#10539;</span></Button>
+        <Button variant="delete" onClick={() => deleteRow(data.id)}>
+          <span>&#10539;</span>
+        </Button>
       </td>
     </>
   );
