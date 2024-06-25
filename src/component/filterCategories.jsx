@@ -20,7 +20,7 @@ const FilterCategories = ({
   };
 
   return (
-    <div className="filter-categories"> 
+    <div className="filter-categories">
       {/* <div className="filter-categories-header">{header}</div> */}
 
       <Select
@@ -30,7 +30,6 @@ const FilterCategories = ({
         onChange={changeSelected}
         value={selectedOptions}
         placeholder={header.length ? header : selectedOptions}
-        autoFocus
         styles={{ customStyles }}
       />
     </div>

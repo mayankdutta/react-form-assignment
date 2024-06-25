@@ -11,7 +11,6 @@ import Select from "react-select";
 import Footer from "./table/footer";
 import { Table, TableContainer, Tfoot } from "../styles/styles";
 import { extraData } from "../utils/extraFunctions";
-import FilterCategories from "./filterCategories";
 
 const AgGrid = () => {
   const { useTableReducer, formData, categories } = useContext(APIDataContext);
@@ -32,16 +31,15 @@ const AgGrid = () => {
     },
     {
       field: "price",
-      // cellRenderer: (props) => <>Rs. {props.node.data.price} </>,
       valueFormatter: (props) => "Rs. " + props.node.data.price,
       editable: true,
     },
     {
       field: "category",
       editable: true,
-
       cellEditor: "agSelectCellEditor",
       cellEditorParams: { values: categories.map((c) => c.label) },
+      floatingFilter: true,
     },
     {
       field: "delete",
@@ -134,7 +132,6 @@ const AgGrid = () => {
         style={{ height: 500 }} // the grid will fill the size of the parent container
       >
         <AgGridReact
-          onGridReady={handleOnGridReady}
           rowData={formData}
           getRowId={getRowId}
           getRowStyle={getRowStyle}
@@ -155,29 +152,6 @@ const AgGrid = () => {
         </Table>
       </TableContainer>
     </>
-  );
-};
-
-const ColumnSelector = (props) => {
-  const category = props.node.data.category;
-  // {props.node.data.category}
-
-  const { categories } = useContext(APIDataContext);
-  const [selectedOptions, setSelectedOptions] = useState(category);
-
-  return (
-    <select
-      value={selectedOptions}
-      onChange={(e) => setSelectedOptions(e.target.value)}
-    >
-      {categories.map((c) => {
-        return (
-          <option key={c.label} value={c.label}>
-            {c.label}
-          </option>
-        );
-      })}
-    </select>
   );
 };
 
